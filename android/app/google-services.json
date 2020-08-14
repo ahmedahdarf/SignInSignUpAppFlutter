@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "999584643633",
+    "firebase_url": "https://pfa-projet-5d592.firebaseio.com",
+    "project_id": "pfa-projet-5d592",
+    "storage_bucket": "pfa-projet-5d592.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999584643633:android:90d86dc47ece12dcac7310",
+        "android_client_info": {
+          "package_name": "com.example.pfa_project_cloudhpc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "999584643633-cbpt7tl1marvoglf0oqj2i620f7c8noa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH5OS4W6JJDBNvDoazemcHSNzriS7BYr0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999584643633-cbpt7tl1marvoglf0oqj2i620f7c8noa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
