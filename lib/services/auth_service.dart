@@ -98,20 +98,35 @@ class NameValidator{
   }
 }
 class EmailValidator{
+  static bool isEmail(String em) {
+
+    String p = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+
+    RegExp regExp = new RegExp(p);
+
+    return regExp.hasMatch(em);
+  }
   static String validate(String value){
+    //bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value);
     if(value.isEmpty){
       return "L'email ne peut pas être vide";
+    }
+    if(!isEmail(value)){
+      return "email invalid";
     }
     return null;
   }
 }
 class PasswordValidator{
   static String validate(String value){
+    Pattern pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{13,}$';
+    RegExp regex = new RegExp(pattern);
     if(value.isEmpty){
       return "Le mot de passe ne peut pas être vide";
     }
-    if(value.length<7){
-      return "Le mot de passe doit contenir 8 caractère au minimum";
+    if(value.length<12  || !regex.hasMatch(value)){
+      return "mot de passe doit contenir 13 caractère au minimum\n avec des caractère spéciaux";
     }
     return null;
   }

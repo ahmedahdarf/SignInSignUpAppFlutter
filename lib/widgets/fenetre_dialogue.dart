@@ -31,9 +31,9 @@ class FenetreDialog extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
-                      color: Colors.deepOrangeAccent,
-                      blurRadius: 10.0,
-                      offset: const Offset(0.0, 10.0)),
+                      color: Colors.orange[500],
+                      blurRadius: 4.0,
+                      offset: const Offset(0.0, 5.0),spreadRadius: 0),
                 ]),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -60,16 +60,21 @@ class FenetreDialog extends StatelessWidget {
                   height: 24.0,
                 ),
                 RaisedButton(
-                  color: Colors.deepOrangeAccent,
+                  color: Colors.orange[500],
+
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40.0)),
-                  child: AutoSizeText(
-                    primaryBtnText,
-                    maxLines: 1,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white),
+                      borderRadius: BorderRadius.circular(20.0)),
+
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: AutoSizeText(
+                      primaryBtnText,
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white),
+                    ),
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -95,7 +100,7 @@ class FenetreDialog extends StatelessWidget {
           secondaryBtnText,
           maxLines: 1,
           style: TextStyle(
-              fontSize: 18, color: Colors.black, fontWeight: FontWeight.w400),
+              fontSize: 22, color: Colors.black, fontWeight: FontWeight.w400),
         ),
         onPressed: () {
           Navigator.of(context).pop();

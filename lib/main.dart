@@ -16,9 +16,10 @@ class MyApp extends StatelessWidget {
     return Provider(
       auth: AuthService(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: "Test",
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: HomeController(),
+        home: Home(),
         routes: <String, WidgetBuilder>{
           '/home': (BuildContext context) => HomeController(),
           '/signUp': (BuildContext context) => SignUpView(authFormType: AuthFormType.signUp,),

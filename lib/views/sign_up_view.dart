@@ -116,13 +116,16 @@ class _SignUpViewState extends State<SignUpView> {
     if (authFormType == AuthFormType.anonymous) {
       submit();
       return Scaffold(
+        resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.orange[500],
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-              SpinKitDoubleBounce(color: Colors.white,),
-            Text("Chargement",style: TextStyle(color: Colors.white,fontSize: 22,fontWeight: FontWeight.bold),)
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+                SpinKitDoubleBounce(color: Colors.white,),
+              Text("Chargement",style: TextStyle(color: Colors.white,fontSize: 22,fontWeight: FontWeight.bold),)
+            ],
+          ),
         ),
       );
     } else {
@@ -213,7 +216,12 @@ class _SignUpViewState extends State<SignUpView> {
               maxLines: 1,
             );
   }
-
+  bool _isVisible=true;
+  void _toggleVisibility(){
+    setState(() {
+      _isVisible=!_isVisible;
+    });
+  }
   List<Widget> buildInputs() {
     List<Widget> textFields = [];
 
@@ -222,7 +230,7 @@ class _SignUpViewState extends State<SignUpView> {
 
         validator: EmailValidator.validate,
         style: TextStyle(fontSize: 22,color: Colors.black),
-        decoration: buildSignUpInputDecoration("Email"),
+        decoration: buildSignUpInputDecoration("Email").copyWith(prefixIcon: Icon(Icons.email)),
 
         onSaved: (val)=> _email=val,
       ),);
@@ -230,12 +238,12 @@ class _SignUpViewState extends State<SignUpView> {
       return textFields;
     }
     // if were in the sign un state add name
-    if([AuthFormType.signIn , AuthFormType.convert].contains(authFormType)){
+    if([AuthFormType.signUp , AuthFormType.convert].contains(authFormType)){
       textFields.add(TextFormField(
 
         validator: NameValidator.validate,
         style: TextStyle(fontSize: 22,color: Colors.black),
-        decoration: buildSignUpInputDecoration("Name"),
+        decoration: buildSignUpInputDecoration("Name").copyWith(prefixIcon: Icon(Icons.account_circle)),
 
         onSaved: (val)=> _name=val,
       ),);
@@ -245,15 +253,22 @@ class _SignUpViewState extends State<SignUpView> {
     textFields.add(TextFormField(
       validator: EmailValidator.validate,
       style: TextStyle(fontSize: 22,),
-      decoration: buildSignUpInputDecoration("Email"),
+      decoration: buildSignUpInputDecoration("Email").copyWith(prefixIcon: Icon(Icons.email,color: Colors.grey,)),
       onSaved: (val)=> _email=val,
     ),);
+
+
     textFields.add(SizedBox(height: 15,));
     textFields.add(TextFormField(
       validator: PasswordValidator.validate,
       style: TextStyle(fontSize: 22,),
-      obscureText: true,
-      decoration: buildSignUpInputDecoration("Mot de passe"),
+      obscureText: _isVisible,
+      decoration: buildSignUpInputDecoration("Mot de passe").copyWith(prefixIcon: Icon(Icons.lock,color: Colors.grey,),
+        suffixIcon: true? IconButton(
+          icon: _isVisible? Icon(Icons.visibility_off,color: Colors.grey,):Icon(Icons.visibility,color: Colors.grey,),
+           onPressed: _toggleVisibility,
+          color: Colors.grey,
+        ):null,),
       onSaved: (val)=> _password=val,
     ),);
     textFields.add(SizedBox(height: 15,));
@@ -296,7 +311,7 @@ class _SignUpViewState extends State<SignUpView> {
           child: Padding(
 
             padding: const EdgeInsets.all(8.0),
-            child: Text(_submitButtonText,style: TextStyle(fontSize: 25,color: Colors.deepOrange),),
+            child: Text(_submitButtonText,style: TextStyle(fontSize: 25,color: Colors.orange[500]),),
           ),
         ),
       ),
@@ -318,9 +333,10 @@ class _SignUpViewState extends State<SignUpView> {
         hintText: hint,
         filled: true,
         fillColor: Colors.white,
-        focusColor: Colors.white30,
+        focusColor: Colors.grey,
+
         enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.deepOrange, width: 0.0)),
+            borderSide: BorderSide(color: Colors.grey, width: 0.0)),
         contentPadding:const EdgeInsets.only(bottom: 10.0, left: 14.0, top: 10.0),
     );
   }
