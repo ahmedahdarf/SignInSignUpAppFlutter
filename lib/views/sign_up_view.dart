@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:pfa_project_cloudhpc/services/auth_service.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:pfa_project_cloudhpc/locator.dart';
+import 'package:pfa_project_cloudhpc/services/aute_repo.dart';
 import 'package:pfa_project_cloudhpc/services/auth_service.dart';
 import 'package:pfa_project_cloudhpc/widgets/provider_widget.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -26,6 +28,7 @@ class SignUpView extends StatefulWidget {
 
 class _SignUpViewState extends State<SignUpView> {
   AuthFormType authFormType;
+  String photourl;
   _SignUpViewState({this.authFormType});
   final formKey = GlobalKey<FormState>();
   String _email, _password, _name, _warning;
@@ -66,7 +69,7 @@ class _SignUpViewState extends State<SignUpView> {
   if(validate()) {
     try {
       final auth = Provider.of(context).auth;
-
+//      final auth1=locator.get<AuthRepo>();
       switch(authFormType){
 
         case AuthFormType.signUp:
@@ -74,7 +77,9 @@ class _SignUpViewState extends State<SignUpView> {
           Navigator.of(context).pushReplacementNamed("/home");
           break;
         case AuthFormType.signIn:
-          await auth.signInWithEmailAndPassword(_email, _password);
+         await auth.signInWithEmailAndPassword(_email, _password);
+       //  String url= await auth.getUserProfileImage(uid);
+
           Navigator.of(context).pushReplacementNamed("/home");
           break;
         case AuthFormType.reset:
@@ -90,7 +95,7 @@ class _SignUpViewState extends State<SignUpView> {
           break;
         case AuthFormType.convert:
           await auth.convertUserWithEmail(_email, _password, _name);
-          Navigator.of(context).pushReplacementNamed("/home");
+          Navigator.of(context).pop();
           break;
       }
 
@@ -119,12 +124,18 @@ class _SignUpViewState extends State<SignUpView> {
         resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.orange[500],
         body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-                SpinKitDoubleBounce(color: Colors.white,),
-              Text("Chargement",style: TextStyle(color: Colors.white,fontSize: 22,fontWeight: FontWeight.bold),)
-            ],
+          child: Padding(
+            padding: const EdgeInsets.only(top:100),
+            child: Column(
+
+              crossAxisAlignment: CrossAxisAlignment.center,
+
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                  SpinKitDoubleBounce(color: Colors.white,),
+                Text("Chargement",style: TextStyle(color: Colors.white,fontSize: 22,fontWeight: FontWeight.bold),)
+              ],
+            ),
           ),
         ),
       );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pfa_project_cloudhpc/locator.dart';
 import 'package:pfa_project_cloudhpc/services/auth_service.dart';
+import 'package:pfa_project_cloudhpc/views/profile_view.dart';
 import 'package:pfa_project_cloudhpc/views/sign_up_view.dart';
 import 'package:pfa_project_cloudhpc/widgets/provider_widget.dart';
 import 'package:pfa_project_cloudhpc/views/first_view.dart';
@@ -7,6 +9,8 @@ import 'package:pfa_project_cloudhpc/views/home_widget.dart';
 
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  setupServices();
   runApp(MyApp());
 }
 
@@ -19,13 +23,14 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Test",
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: Home(),
+        home: HomeController(),
         routes: <String, WidgetBuilder>{
           '/home': (BuildContext context) => HomeController(),
           '/signUp': (BuildContext context) => SignUpView(authFormType: AuthFormType.signUp,),
           '/signIn': (BuildContext context) => SignUpView(authFormType: AuthFormType.signIn,),
           '/anonymousSignIn': (BuildContext context) => SignUpView(authFormType: AuthFormType.anonymous,),
           '/convertUser':(BuildContext context) => SignUpView(authFormType: AuthFormType.convert,),
+          '/profile': (BuildContext context)=> ProfilView(),
 
         },
       ),
