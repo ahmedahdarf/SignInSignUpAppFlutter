@@ -23,42 +23,42 @@ class _ProfilViewState extends State<ProfilView> {
   String _uploadFileUrl="";
   String urlUid;
 
- void getUserProfilePicDowloadUrl() async{
-   try {
-     final FirebaseUser user = await AuthService().getCurrentUser();
-     final uid = user.uid;
-     print(" ****** $uid   ****");
-     var storageRef = FirebaseStorage.instance.ref().child(
-         "users/profile/$uid");
+  void getUserProfilePicDowloadUrl() async{
+    try {
+      final FirebaseUser user = await AuthService().getCurrentUser();
+      final uid = user.uid;
+      print(" ****** $uid   ****");
+      var storageRef = FirebaseStorage.instance.ref().child(
+          "users/profile/$uid");
 
-     setState(() async {
-       _uploadFileUrl = await storageRef.getDownloadURL();
-       await AuthService().updateProfilePic(_uploadFileUrl);
-      // print("url de la photo $_uploadFileUrl");
+      setState(() async {
+        _uploadFileUrl = await storageRef.getDownloadURL();
+        await AuthService().updateProfilePic(_uploadFileUrl);
+        // print("url de la photo $_uploadFileUrl");
 
-       urlUid = await storageRef.getName();
-       _isloadin=true;
-     });
+        urlUid = await storageRef.getName();
+        _isloadin=true;
+      });
 
-     print("uid ${ await storageRef.getName()}");
-     print("uid =$_uploadFileUrl");
-   }catch(e){
-     print(e);
-   }
+      print("uid ${ await storageRef.getName()}");
+      print("uid =$_uploadFileUrl");
+    }catch(e){
+      print(e);
+    }
   }
 
 
   Widget showPict(context,snapshot){
 
-   if(snapshot.isAnonymous==true){
-    return Align(
-         alignment: Alignment.center,
-         child:CircleAvatar(
-           radius: 100,
-           backgroundImage: AssetImage('images/anonymous.jpg'),
-         )
-     );
-   }
+    if(snapshot.isAnonymous==true){
+      return Align(
+          alignment: Alignment.center,
+          child:CircleAvatar(
+            radius: 100,
+            backgroundImage: AssetImage('images/anonymous.jpg'),
+          )
+      );
+    }
     if(_image!=null) {
       return CircleAvatar(
         radius: 100,
@@ -120,33 +120,33 @@ class _ProfilViewState extends State<ProfilView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             user.isAnonymous==true?Align(
-            alignment: Alignment.center,
-            child:CircleAvatar(
-              radius: 100,
-              backgroundImage: AssetImage('images/anonymous.jpg'),
-            )
-        ):Row(children: [
-          Align(
-              alignment: Alignment.center,
-              child:CircleAvatar(
-                radius: 100,
-                backgroundImage: user.photoUrl!=null?NetworkImage(user.photoUrl): AssetImage('images/compte.jpg'),
+                alignment: Alignment.center,
+                child:CircleAvatar(
+                  radius: 100,
+                  backgroundImage: AssetImage('images/anonymous.jpg'),
+                )
+            ):Row(children: [
+              Align(
+                  alignment: Alignment.center,
+                  child:CircleAvatar(
+                    radius: 100,
+                    backgroundImage: user.photoUrl!=null?NetworkImage(user.photoUrl): AssetImage('images/compte.jpg'),
+                  )
+              ),
+              Padding(
+                padding: EdgeInsets.only(top:60),
+                child: IconButton(
+                  icon: Icon(FontAwesomeIcons.camera,size: 36,),
+                  onPressed: (){
+                    getImage();
+                    //uploadFile(context, snapshot);
+                  },
+                ),
               )
-          ),
-          Padding(
-            padding: EdgeInsets.only(top:60),
-            child: IconButton(
-              icon: Icon(FontAwesomeIcons.camera,size: 36,),
-              onPressed: (){
-                getImage();
-                //uploadFile(context, snapshot);
-              },
-            ),
-          )
-        ],)
+            ],)
 
-      ],
-    )
+          ],
+        )
         ,
         SizedBox(height: 10,),
         Card(
@@ -154,7 +154,7 @@ class _ProfilViewState extends State<ProfilView> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-                //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children:[
                   Container(
                     child: Text("Nom: ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
@@ -183,47 +183,47 @@ class _ProfilViewState extends State<ProfilView> {
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
-              children: [Row(
-                 // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children:[
-                    Container(
-                      child: Text("Email: ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                children: [Row(
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children:[
+                      Container(
+                        child: Text("Email: ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
 
+                      ),
+
+                      Container(
+                        child: Text(" ${user.email?? "Anonymous"}",style: TextStyle(fontSize: 19,),),
+
+                      ),
+
+
+                    ]
+                ),
+
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left:300),
+                      child: Align(alignment: Alignment.centerLeft,child: Container(
+                        child: Icon(FontAwesomeIcons.pen),
+                      ),),
                     ),
+                  )
 
-                    Container(
-                      child: Text(" ${user.email?? "Anonymous"}",style: TextStyle(fontSize: 19,),),
-
-                    ),
-
-
-                  ]
-              ),
-
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left:300),
-                    child: Align(alignment: Alignment.centerLeft,child: Container(
-                      child: Icon(FontAwesomeIcons.pen),
-                    ),),
-                  ),
-                )
-
-           ] ),
+                ] ),
           ),
         ),
 
         Card(
           elevation: 2,
           child: Row(
-            children: [
-    Padding(
-    padding: const EdgeInsets.all(10.0),
-    child :Text("Crée le",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),)
-              ,Padding(
-              padding: const EdgeInsets.all(10.0),
-              child :Text("Crée : ${DateFormat("dd/MM/yyyy").format(user.metadata.creationTime)}",style: TextStyle(fontSize: 20),),),
-          ]),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child :Text("Crée le",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),)
+                ,Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child :Text("Crée : ${DateFormat("dd/MM/yyyy").format(user.metadata.creationTime)}",style: TextStyle(fontSize: 20),),),
+              ]),
         ),
 
         showSignOut(context,user.isAnonymous,snapshot),
@@ -324,7 +324,7 @@ class _ProfilViewState extends State<ProfilView> {
     // TODO: implement initState
     super.initState();
 
-   /* setState(() {
+    /* setState(() {
       this.getUserProfilePicDowloadUrl();
     });*/
 
@@ -347,12 +347,12 @@ class _ProfilViewState extends State<ProfilView> {
               builder: (context,snapshot){
 
                 if(snapshot.connectionState==ConnectionState.done){
-                if(_uploadFileUrl==null){
-                  setState(() {
-                    getUserProfilePicDowloadUrl();
-                  });
-                }
-                 return  displayUserinfo(context,snapshot);
+                  if(_uploadFileUrl==null){
+                    setState(() {
+                      getUserProfilePicDowloadUrl();
+                    });
+                  }
+                  return  displayUserinfo(context,snapshot);
                 }else{
                   return CircularProgressIndicator();
                 }
