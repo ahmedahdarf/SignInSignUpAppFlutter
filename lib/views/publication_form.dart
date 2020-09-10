@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -11,6 +13,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pfa_project_cloudhpc/models/crowd_sensing.dart';
 import 'package:pfa_project_cloudhpc/views/home_widget.dart';
 import 'package:pfa_project_cloudhpc/widgets/provider_widget.dart';
+import 'package:convert/convert.dart';
+import 'package:image/image.dart' as IM;
+import 'dart:io';
+import 'dart:ui' as ui;
+import 'dart:math' as Math;
+import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class PublicationForm extends StatefulWidget {
   @override
@@ -19,7 +31,7 @@ class PublicationForm extends StatefulWidget {
 
 class _PublicationFormState extends State<PublicationForm> {
   final GlobalKey<FormState> _formkey=GlobalKey<FormState>();
-
+  
   CrowdSensingParticip crowdSensingParticip;
   String userId;
   var user=null;
@@ -32,6 +44,10 @@ class _PublicationFormState extends State<PublicationForm> {
   LatLng _center ;
   Position currentLocation,_currentPosition;
   final firestoreInstance=Firestore.instance;
+  File _imageFile;
+  List<Face> _faces;
+  bool isLoading = false;
+  ui.Image _image;
 
 
   _getCurrentLocation() {
@@ -56,7 +72,7 @@ class _PublicationFormState extends State<PublicationForm> {
 
       setState(() {
         _currentAddress =
-        "${place.locality}, ${place.country},${place.position.longitude}, ";
+        "${place.locality}, ${place.country}";
       });
       print("$_currentAddress");
     } catch (e) {
@@ -133,6 +149,8 @@ class _PublicationFormState extends State<PublicationForm> {
 
   }
 
+
+
   Future saveData() async {
     if(!_formkey.currentState.validate()) return null ;
     _formkey.currentState.save();
@@ -140,18 +158,19 @@ class _PublicationFormState extends State<PublicationForm> {
 
    // print ( 'Fichier téléchargé ${snapshot.data.uid}' );
 
-  if(imageFile!=null){
+  if(_imageFile!=null){
     StorageReference storageReference = FirebaseStorage.instance
         .ref ()
-        .child ("crowdSensing/${imageFile.path}");
+        .child ("crowdSensing/${_imageFile.path}");
 
-    StorageUploadTask uploadTask = storageReference.putFile (imageFile);
+
+
+
+
+    StorageUploadTask uploadTask = storageReference.putFile (_imageFile);
     StorageTaskSnapshot taskSnapshot=await uploadTask.onComplete;
     imageUrl=await storageReference.getDownloadURL();
-
   }
-  String nom,image;
-
     firestoreInstance.collection("crowdSensing").add({
       "user": {"uid":userId,"name":user.displayName??"anonyme","imageProfil":user.photoUrl??"images/anonymous.jpg"},
       "location":_currentAddress,
@@ -170,7 +189,7 @@ class _PublicationFormState extends State<PublicationForm> {
     Navigator.of(context).pushReplacementNamed("/home");
   }
   Widget _decideImageView() {
-    if (imageFile == null)
+    /*if (imageFile == null)
       return Text("No selected image");
     else {
       return Image.file(
@@ -179,7 +198,36 @@ class _PublicationFormState extends State<PublicationForm> {
         height: 250,
         fit: BoxFit.fill,
       );
-    }
+    }*/
+   return  isLoading
+        ? Center(child: CircularProgressIndicator())
+        : (_imageFile == null)
+        ? Center(child: Text('No image selected'))
+        : Center(
+      child: FittedBox(
+        child: SizedBox(
+          width: _image.width.toDouble(),
+          height: _image.height.toDouble(),
+
+          child: Stack(
+              fit: StackFit.expand,
+            children:[
+              CustomPaint(
+
+              painter: FacePainter(_image, _faces),
+
+
+            ),
+              Positioned.fill(child: BackdropFilter(
+                filter: ui.ImageFilter.blur(sigmaX: 2,sigmaY: 2),
+                child: Container(color: Colors.black.withOpacity(0),),
+              ))
+        ]
+
+          ),
+        ),
+      ),
+    );
   }
 
   _openGallery(BuildContext context) async {
@@ -211,7 +259,8 @@ class _PublicationFormState extends State<PublicationForm> {
                   GestureDetector(
                     child: Text("Gallery"),
                     onTap: () {
-                      _openGallery(context);
+                     //_openGallery(context);
+                     _getImageAndDetectFaces(context,ImageSource.gallery);
                     },
                   ),
                   Padding(
@@ -221,7 +270,8 @@ class _PublicationFormState extends State<PublicationForm> {
                   GestureDetector(
                     child: Text("Camera"),
                     onTap: () {
-                      _openCamera(context);
+                      //_openCamera(context);
+                      _getImageAndDetectFaces(context,ImageSource.camera);
                     },
                   )
                 ],
@@ -253,5 +303,88 @@ class _PublicationFormState extends State<PublicationForm> {
 
        },
      );
+  }
+
+
+  _getImageAndDetectFaces(BuildContext context,ImageSource source) async {
+    final imageFile = await ImagePicker.pickImage(
+        source: source
+    );
+    setState(() {
+      isLoading = true;
+    });
+    final image = FirebaseVisionImage.fromFile(imageFile);
+    IM.Image img;
+
+    final faceDetector = FirebaseVision.instance.faceDetector(
+        FaceDetectorOptions(
+            mode: FaceDetectorMode.fast,
+            enableLandmarks: true
+        )
+    );
+    List<Face> faces = await faceDetector.processImage(image);
+
+
+    if (mounted) {
+      setState(() {
+        _imageFile = imageFile;
+        _faces = faces;
+        _loadImage(_imageFile);
+        //_imageFile=await writeToFile(pngBytes);
+       // _imageFile=_image.toByteData(format: ui.ImageByteFormat.rawRgba) as File;
+
+      });
+    }
+    Navigator.of(context).pop();
+  }
+
+  _loadImage(File file) async {
+    final data = await file.readAsBytes();
+
+
+    await decodeImageFromList(data).then(
+          (value) => setState(() {
+        _image = value;
+        isLoading = false;
+      }),
+    );
+  }
+}
+
+
+class FacePainter extends CustomPainter {
+  ui.Image image;
+  final List<Face> faces;
+  final List<Rect> rects = [];
+  final recorder = new ui.PictureRecorder();
+
+  FacePainter(this.image, this.faces) {
+    for (var i = 0; i < faces.length; i++) {
+      rects.add(faces[i].boundingBox);
+    }
+  }
+
+  @override
+  void paint(ui.Canvas canvas, ui.Size size) {
+    final radius=Math.min(size.width,size.height);
+    final center =Offset(size.width/2,size.height/2);
+    final Paint paint = Paint()
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 13.0
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 3.0)
+      ..imageFilter=ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5)
+      ..color = Colors.white.withAlpha(500);
+
+
+    canvas.drawImage(image, Offset.zero, Paint());
+    for (var i = 0; i < faces.length; i++) {
+      canvas.drawOval(rects[i], paint);
+
+    }
+  }
+
+  @override
+  bool shouldRepaint(FacePainter oldDelegate) {
+    return image != oldDelegate.image || faces != oldDelegate.faces;
   }
 }

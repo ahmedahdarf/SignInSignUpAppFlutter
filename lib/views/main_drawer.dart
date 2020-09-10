@@ -59,7 +59,7 @@ class MainDrawer extends StatelessWidget {
             title: Text("Profil",style: TextStyle(fontSize: 15),),
             onTap: (){
               Navigator.of(context).pop();
-             Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfilView()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfilView()));
             },),
           Divider(color: Colors.deepOrangeAccent,),
           ListTile(

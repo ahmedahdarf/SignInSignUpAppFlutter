@@ -1,159 +1,120 @@
-
-
 import 'dart:io';
-
-import 'package:auto_size_text/auto_size_text.dart';
+import 'dart:ui' as ui;
+import 'dart:math' as Math;
+import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+
+
 
 class CameraView extends StatefulWidget {
   @override
-  _CameraViewState createState() => _CameraViewState();
+  _CameraView createState() => _CameraView();
 }
 
-class _CameraViewState extends State<CameraView> {
-  File _selectedFile;
-  bool inProcess=false;
-  String _commentaire;
-  final GlobalKey _key=GlobalKey<FormState>();
-  final picker = ImagePicker();
-  Widget getImageWidget(){
-    if(_selectedFile!=null){
-      return Image.file(
-       _selectedFile,
-        width: 450,
-        height: 250,
-        fit:BoxFit.cover,
-      );
-    }else{
-        return Image.asset("images/camera.jpg",
-          width: 400,
-          height: 250,
-          fit:BoxFit.cover,
-        );
+class _CameraView extends State<CameraView> {
+  File _imageFile;
+  List<Face> _faces;
+  bool isLoading = false;
+  ui.Image _image;
+
+  _getImageAndDetectFaces() async {
+    final imageFile = await ImagePicker.pickImage(
+        source: ImageSource.gallery
+    );
+    setState(() {
+      isLoading = true;
+    });
+    final image = FirebaseVisionImage.fromFile(imageFile);
+    final faceDetector = FirebaseVision.instance.faceDetector(
+        FaceDetectorOptions(
+            mode: FaceDetectorMode.fast,
+            enableLandmarks: true
+        )
+    );
+    List<Face> faces = await faceDetector.processImage(image);
+    if (mounted) {
+      setState(() {
+        _imageFile = imageFile;
+        _faces = faces;
+        _loadImage(imageFile);
+      });
     }
   }
 
-   getImage(ImageSource source) async{
-    this.setState(() {
-      inProcess=true;
-    });
-    File imageFile = await ImagePicker.pickImage(source: source);
-   if(imageFile!=null){
-     File cropper=await ImageCropper.cropImage(
-       sourcePath: imageFile.path,
-       aspectRatio: CropAspectRatio(ratioX: 1,ratioY: 1),
-       compressQuality: 100,
-       maxWidth: 700,
-       maxHeight: 700,
-       compressFormat: ImageCompressFormat.jpg,
-       androidUiSettings:AndroidUiSettings(
-           toolbarTitle: 'Cropper',
-           toolbarColor: Colors.orange[500],
-           toolbarWidgetColor: Colors.white,
-           initAspectRatio: CropAspectRatioPreset.original,
-           backgroundColor: Colors.orange[500],
-           lockAspectRatio: false),
-
-
-     );
-     setState(() {
-       _selectedFile=cropper;
-       inProcess=false;
-     });
-
-   }else{
-     this.setState(() {
-       inProcess=false;
-
-     });
-   }
-
-
+  _loadImage(File file) async {
+    final data = await file.readAsBytes();
+    await decodeImageFromList(data).then(
+          (value) => setState(() {
+        _image = value;
+        isLoading = false;
+      }),
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Camera"), backgroundColor: Colors.orange[500],),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          color: Colors.white,
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : (_imageFile == null)
+          ? Center(child: Text('No image selected'))
+          : Center(
+        child: FittedBox(
+          child: SizedBox(
+            width: _image.width.toDouble(),
+            height: _image.height.toDouble(),
+            child: CustomPaint(
 
-          child: Form(
-
-            key: _key,
-            child: SingleChildScrollView(
-
-              child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                  getImageWidget(),
-                  SizedBox(height: 10.0,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-
-                      MaterialButton(
-                        color:  Colors.orange[500],
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Icon(Icons.camera_alt,size:50),
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100.0)),
-                        onPressed: (){
-                              getImage(ImageSource.camera);
-                        },
-                      ),
-                      MaterialButton(
-                        color:  Colors.orange[500],
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Icon(Icons.image,size:50),
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100.0)),
-                        onPressed: (){
-                          getImage(ImageSource.gallery);
-                        },
-                      ),
-
-
-                    ],
-                  ),
-             /*   SizedBox(height: 20.0,),
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Ajouter Commentaire"
-                  ),
-                ),*/
-                SizedBox(height: 20.0,),
-                TextFormField( decoration: InputDecoration(
-                    hintText: "Ajouter Commentaire"
-                ),),
-
-                SizedBox(height: 30.0,),
-                FlatButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-                  color: Colors.orange[500],
-
-                onPressed: (){
-
-                },
-                  child: Text("Save",style: TextStyle(color: Colors.white,fontSize: 24),),
-                ),
-
-
-
-              ],
-                ) ,
+              painter: FacePainter(_image, _faces),
 
             ),
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _getImageAndDetectFaces,
+        tooltip: 'Pick Image',
+        child: Icon(Icons.add_a_photo),
+      ),
     );
+  }
+}
+
+class FacePainter extends CustomPainter {
+  final ui.Image image;
+  final List<Face> faces;
+  final List<Rect> rects = [];
+
+  FacePainter(this.image, this.faces) {
+    for (var i = 0; i < faces.length; i++) {
+      rects.add(faces[i].boundingBox);
+    }
+  }
+
+  @override
+  void paint(ui.Canvas canvas, ui.Size size) {
+    final radius=Math.min(size.width,size.height);
+    final center =Offset(size.width/2,size.height/2);
+    final Paint paint = Paint()
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 13.0
+      ..color = Colors.white.withAlpha(500);
+     // ..maskFilter=MaskFilter.blur(BlurStyle.solid, 40.0);
+
+    canvas.drawImage(image, Offset.zero, Paint());
+    for (var i = 0; i < faces.length; i++) {
+      canvas.drawOval(rects[i], paint);
+      final smilePaint=Paint()
+        ..style=PaintingStyle.fill
+        ..strokeWidth=10;
+
+    }
+  }
+
+  @override
+  bool shouldRepaint(FacePainter oldDelegate) {
+    return image != oldDelegate.image || faces != oldDelegate.faces;
   }
 }
