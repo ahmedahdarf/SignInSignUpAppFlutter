@@ -22,7 +22,7 @@ class _MapViewState extends State<MapView> {
 
   final Geolocator _geolocator = Geolocator();
   final Set<Polyline> pl={};
- // List<LatLng> routesCoords;
+  // List<LatLng> routesCoords;
   //GoogleMapPolyline googleMapPolyline= new GoogleMapPolyline(apiKey: Secrets.API_KEY);
   Position _currentPosition;
 
@@ -220,12 +220,12 @@ class _MapViewState extends State<MapView> {
 
         // Calculating the distance between the start and the end positions
         // with a straight path, without considering any route
-          distanceInMeters = await Geolocator().bearingBetween(
-         startCoordinates.latitude,
+        distanceInMeters = await Geolocator().bearingBetween(
+          startCoordinates.latitude,
           startCoordinates.longitude,
-           destinationCoordinates.latitude,
+          destinationCoordinates.latitude,
           destinationCoordinates.longitude,
-         );
+        );
 
         await _createPolylines(startCoordinates, destinationCoordinates);
 
@@ -270,20 +270,20 @@ class _MapViewState extends State<MapView> {
   // Create the polylines for showing the route between two places
   _createPolylines(Position start, Position destination) async {
 
-      polylinePoints = PolylinePoints();
+    polylinePoints = PolylinePoints();
 
-      PolylineResult result  = await polylinePoints.getRouteBetweenCoordinates(
-        Secrets.API_KEY, // Google Maps API Key
-        PointLatLng(start.latitude, start.longitude),
-        PointLatLng(destination.latitude, destination.longitude),
-        travelMode: TravelMode.transit,
-      );
+    PolylineResult result  = await polylinePoints.getRouteBetweenCoordinates(
+      Secrets.API_KEY, // Google Maps API Key
+      PointLatLng(start.latitude, start.longitude),
+      PointLatLng(destination.latitude, destination.longitude),
+      travelMode: TravelMode.transit,
+    );
 
-      if (result.points.isNotEmpty) {
-        result.points.forEach((PointLatLng point) {
-          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-        });
-      }
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    }
 
 
     PolylineId id = PolylineId('polyline');

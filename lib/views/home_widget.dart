@@ -111,18 +111,17 @@ class _HomeState extends State<Home> {
 
                         ],
                       ),
-                      SizedBox(height: 5,),
-                      Center(child: Text(querySnapshot.documents[i].data['commentaire'],style: TextStyle(fontSize: 25),)),
+                      SizedBox(height: 8,),
+                      Center(child: Text(querySnapshot.documents[i].data['commentaire'],style: TextStyle(fontSize: 22),)),
+                      SizedBox(height: 8,),
                       querySnapshot.documents[i].data['image']!=null?
-                      Center(
-                        child: ClipRRect(
-                          //width: MediaQuery.of(context).size.width,
-
-                          child: Image.network(querySnapshot.documents[i].data['image'],width: 380,height: 250,  fit: BoxFit.fill,
-                          ),
+                      ClipRRect(
 
 
+                        child: Image.network(querySnapshot.documents[i].data['image'],width: 390,height: 230,  fit: BoxFit.fitHeight,
                         ),
+
+
                       ):Container(),
 
                     ],
@@ -130,7 +129,9 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-                SizedBox(height: 15,),
+                SizedBox(height:5,),
+                Divider(color: Colors.white,),
+                SizedBox(height:5,),
 
 
               ]
