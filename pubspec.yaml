@@ -47,6 +47,15 @@ dependencies:
   firebase_storage:
   get_it:
   shared_preferences:
+  badges: ^1.1.1
+  scoped_model: ^1.0.1
+  flutter_bluetooth_serial: ^0.2.2
+  http: ^0.12.0+2
+  equatable: ^1.0.3
+  bloc: ^0.13.0
+  flutter_bloc: ^0.13.0
+  permission_handler: ^3.1.0
+  flutter_native_splash: ^0.1.9
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -87,6 +96,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: WeatherIcons
+      fonts:
+        - asset: fonts/weathericons-regular.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

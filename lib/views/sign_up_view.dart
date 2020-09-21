@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:pfa_project_cloudhpc/services/auth_service.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:pfa_project_cloudhpc/locator.dart';
 import 'package:pfa_project_cloudhpc/services/aute_repo.dart';
 import 'package:pfa_project_cloudhpc/services/auth_service.dart';
 import 'package:pfa_project_cloudhpc/widgets/provider_widget.dart';
@@ -41,12 +40,12 @@ class _SignUpViewState extends State<SignUpView> {
       });
     }else if(state=='home'){
 
-        Navigator.of(context).pushReplacementNamed('/home');
-       // Navigator.of(context).pop();
+      Navigator.of(context).pushReplacementNamed('/home');
+      // Navigator.of(context).pop();
     } else{
-        setState(() {
-          authFormType=AuthFormType.signIn;
-        });
+      setState(() {
+        authFormType=AuthFormType.signIn;
+      });
     }
   }
 
@@ -66,46 +65,46 @@ class _SignUpViewState extends State<SignUpView> {
   void submit() async{
 
 
-  if(validate()) {
-    try {
-      final auth = Provider.of(context).auth;
+    if(validate()) {
+      try {
+        final auth = Provider.of(context).auth;
 //      final auth1=locator.get<AuthRepo>();
-      switch(authFormType){
+        switch(authFormType){
 
-        case AuthFormType.signUp:
-          await auth.createUserWithEmailAndPassword(_email, _password, _name);
-          Navigator.of(context).pushReplacementNamed("/home");
-          break;
-        case AuthFormType.signIn:
-         await auth.signInWithEmailAndPassword(_email, _password);
-       //  String url= await auth.getUserProfileImage(uid);
+          case AuthFormType.signUp:
+            await auth.createUserWithEmailAndPassword(_email, _password, _name);
+            Navigator.of(context).pushReplacementNamed("/home");
+            break;
+          case AuthFormType.signIn:
+            await auth.signInWithEmailAndPassword(_email, _password);
+            //  String url= await auth.getUserProfileImage(uid);
 
-          Navigator.of(context).pushReplacementNamed("/home");
-          break;
-        case AuthFormType.reset:
-          await auth.sendPasswordResetEmail(_email);
-          _warning="un lien de réinitialisation du mot de passe a été envoyé à $_email";
-          setState(() {authFormType=AuthFormType.signIn; });
-          break;
-        case AuthFormType.anonymous:
+            Navigator.of(context).pushReplacementNamed("/home");
+            break;
+          case AuthFormType.reset:
+            await auth.sendPasswordResetEmail(_email);
+            _warning="un lien de réinitialisation du mot de passe a été envoyé à $_email";
+            setState(() {authFormType=AuthFormType.signIn; });
+            break;
+          case AuthFormType.anonymous:
           // TODO: Handle this case.
           //final aute=Provider.of(context).auth;
-          await auth.signInAnonymously();
-          Navigator.of(context).pushReplacementNamed("/home");
-          break;
-        case AuthFormType.convert:
-          await auth.convertUserWithEmail(_email, _password, _name);
-          Navigator.of(context).pop();
-          break;
-      }
+            await auth.signInAnonymously();
+            Navigator.of(context).pushReplacementNamed("/home");
+            break;
+          case AuthFormType.convert:
+            await auth.convertUserWithEmail(_email, _password, _name);
+            Navigator.of(context).pop();
+            break;
+        }
 
-    } catch (e) {
-      print(e);
-      setState(() {
-        _warning=e.message;
-      });
+      } catch (e) {
+        print(e);
+        setState(() {
+          _warning=e.message;
+        });
+      }
     }
-  }
   }
   @override
   Widget build(BuildContext context) {
@@ -132,7 +131,7 @@ class _SignUpViewState extends State<SignUpView> {
 
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                  SpinKitDoubleBounce(color: Colors.white,),
+                SpinKitDoubleBounce(color: Colors.white,),
                 Text("Chargement",style: TextStyle(color: Colors.white,fontSize: 22,fontWeight: FontWeight.bold),)
               ],
             ),
@@ -221,11 +220,11 @@ class _SignUpViewState extends State<SignUpView> {
       _headerText="Créer un nouveau compte";
     }
     return AutoSizeText(
-              _headerText,
-              style: TextStyle(fontSize: 32, color: Colors.white,fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-            );
+      _headerText,
+      style: TextStyle(fontSize: 32, color: Colors.white,fontWeight: FontWeight.w500),
+      textAlign: TextAlign.center,
+      maxLines: 1,
+    );
   }
   bool _isVisible=true;
   void _toggleVisibility(){
@@ -277,14 +276,14 @@ class _SignUpViewState extends State<SignUpView> {
       decoration: buildSignUpInputDecoration("Mot de passe").copyWith(prefixIcon: Icon(Icons.lock,color: Colors.grey,),
         suffixIcon: true? IconButton(
           icon: _isVisible? Icon(Icons.visibility_off,color: Colors.grey,):Icon(Icons.visibility,color: Colors.grey,),
-           onPressed: _toggleVisibility,
+          onPressed: _toggleVisibility,
           color: Colors.grey,
         ):null,),
       onSaved: (val)=> _password=val,
     ),);
     textFields.add(SizedBox(height: 15,));
 
-  return textFields;
+    return textFields;
   }
 
   List<Widget> buildButtons(){
@@ -341,14 +340,14 @@ class _SignUpViewState extends State<SignUpView> {
   }
   InputDecoration buildSignUpInputDecoration(String hint) {
     return InputDecoration(
-        hintText: hint,
-        filled: true,
-        fillColor: Colors.white,
-        focusColor: Colors.grey,
+      hintText: hint,
+      filled: true,
+      fillColor: Colors.white,
+      focusColor: Colors.grey,
 
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey, width: 0.0)),
-        contentPadding:const EdgeInsets.only(bottom: 10.0, left: 14.0, top: 10.0),
+      enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey, width: 0.0)),
+      contentPadding:const EdgeInsets.only(bottom: 10.0, left: 14.0, top: 10.0),
     );
   }
 
@@ -366,7 +365,7 @@ class _SignUpViewState extends State<SignUpView> {
     );
   }
 
- Widget buildSocialIcons(bool visible){
+  Widget buildSocialIcons(bool visible){
     final auth =Provider.of(context).auth;
     return Visibility(
       child: Column(
@@ -395,6 +394,5 @@ class _SignUpViewState extends State<SignUpView> {
       ),
       visible: visible ,
     );
- }
+  }
 }
-

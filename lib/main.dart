@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pfa_project_cloudhpc/locator.dart';
+
 import 'package:pfa_project_cloudhpc/services/auth_service.dart';
 import 'package:pfa_project_cloudhpc/views/profile_view.dart';
 import 'package:pfa_project_cloudhpc/views/sign_up_view.dart';
@@ -10,7 +10,7 @@ import 'package:pfa_project_cloudhpc/views/home_widget.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  setupServices();
+
   runApp(MyApp());
 }
 

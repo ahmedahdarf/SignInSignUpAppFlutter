@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:pfa_project_cloudhpc/discovery_screen.dart';
 import 'package:pfa_project_cloudhpc/services/auth_service.dart';
 import 'package:pfa_project_cloudhpc/views/camera_view.dart';
 import 'package:pfa_project_cloudhpc/views/map_view.dart';
 import 'package:pfa_project_cloudhpc/views/photo_view.dart';
 import 'package:pfa_project_cloudhpc/views/profile_view.dart';
+import 'package:pfa_project_cloudhpc/weather_screen.dart';
 import 'package:pfa_project_cloudhpc/widgets/provider_widget.dart';
 
 
@@ -31,19 +33,20 @@ class MainDrawer extends StatelessWidget {
                         },),
                     Divider(color: Colors.deepOrangeAccent,),
                     ListTile(
-                        leading: Icon(Icons.search),
-                        title: Text("Search",style: TextStyle(fontSize: 15),),
+                        leading: Icon(Icons.cloud),
+                        title: Text("weather",style: TextStyle(fontSize: 15),),
                         onTap: (){
-                            Navigator.of(context).pop();
-                            //Navigator.push(context, MaterialPageRoute(builder: (context)=> new Weather()));
+
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> WeatherScreen()));
+                           // Navigator.pushNamed(context, '/weather');
                         },),
                     Divider(color: Colors.deepOrangeAccent,),
                     ListTile(
-                        leading: Icon(Icons.photo_camera),
-                        title: Text("Camera",style: TextStyle(fontSize: 15),),
+                        leading: Icon(Icons.bluetooth),
+                        title: Text("bluetooth",style: TextStyle(fontSize: 15),),
                         onTap: (){
-                            Navigator.of(context).pop();
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=> CameraView()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>DiscoveryPage()));
+                            //Navigator.pushNamed(context, '/discovery');
                         },),
                     Divider(color: Colors.deepOrangeAccent,),
                     ListTile(
