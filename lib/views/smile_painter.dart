@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui' as ui show Image;
 import 'dart:math' as Math;
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
@@ -14,7 +13,6 @@ class SmilePainter extends CustomPainter {
   final ui.Image image;
   final List<Face> faces;
 
-
   SmilePainter(this.image, this.faces);
 
   @override
@@ -22,8 +20,6 @@ class SmilePainter extends CustomPainter {
     if (image != null) {
       canvas.drawImage(image, Offset.zero, Paint());
     }
-
-
 
     //Draw Body
     final paint = Paint()..color = Colors.white;
@@ -35,7 +31,6 @@ class SmilePainter extends CustomPainter {
       final smilePaint = Paint();
 
       canvas.drawCircle(center, radius, paint);
-
     }
   }
 
@@ -76,7 +71,7 @@ class SmilePainterLiveCamera extends CustomPainter {
 
       final smilePaint = Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth =  8;
+        ..strokeWidth = 8;
 
       //Draw rect border
       //canvas.drawRect(rect, paintRectStyle);
@@ -85,8 +80,6 @@ class SmilePainterLiveCamera extends CustomPainter {
       canvas.drawCircle(center, radius, paint);
 
       //Draw mouth
-
-
 
     }
   }

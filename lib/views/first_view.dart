@@ -8,7 +8,6 @@ class FirstView extends StatelessWidget {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
     return Scaffold(
-
       body: Container(
         width: _width,
         color: Colors.orange[500],
@@ -24,7 +23,7 @@ class FirstView extends StatelessWidget {
                     height: _height * 0.10,
                   ),
                   Text(
-                    "Bienvenu",
+                    "Bienvenue",
                     style: TextStyle(fontSize: 44, color: Colors.white),
                   ),
                   SizedBox(
@@ -57,7 +56,8 @@ class FirstView extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => FenetreDialog(
-                                title: "souhaitez-vous créer un compte gratuit?",
+                                title:
+                                    "souhaitez-vous créer un compte gratuit?",
                                 description:
                                     "Avec un compte vous pouvez consulter les fils d'actualités et de participer à la collection de données",
                                 primaryBtnText: "S'inscrire",

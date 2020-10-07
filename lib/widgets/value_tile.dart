@@ -35,8 +35,7 @@ class ValueTile extends StatelessWidget {
         ),
         Text(
           this.value,
-          style:
-              TextStyle(),
+          style: TextStyle(),
         ),
       ],
     );

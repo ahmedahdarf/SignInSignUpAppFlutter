@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
-import 'package:pfa_project_cloudhpc/model/weather.dart';
+import 'package:pfa_project_cloudhpc/models/weather.dart';
 
 import 'http_exception.dart';
 

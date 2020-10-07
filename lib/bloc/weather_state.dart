@@ -1,17 +1,14 @@
-
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
-import 'package:pfa_project_cloudhpc/model/weather.dart';
+import 'package:pfa_project_cloudhpc/models/weather.dart';
 
 abstract class WeatherState extends Equatable {
   WeatherState([List props = const []]) : super();
-   @override
+  @override
   List<Object> get props => [const []];
 }
 
-class WeatherEmpty extends WeatherState {
- 
-}
+class WeatherEmpty extends WeatherState {}
 
 class WeatherLoading extends WeatherState {}
 

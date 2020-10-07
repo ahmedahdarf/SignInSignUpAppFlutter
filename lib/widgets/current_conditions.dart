@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pfa_project_cloudhpc/model/weather.dart';
+import 'package:pfa_project_cloudhpc/models/weather.dart';
 import 'package:pfa_project_cloudhpc/utils/converters.dart';
 import 'package:pfa_project_cloudhpc/widgets/value_tile.dart';
 

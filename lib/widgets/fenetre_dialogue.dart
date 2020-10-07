@@ -33,7 +33,8 @@ class FenetreDialog extends StatelessWidget {
                   BoxShadow(
                       color: Colors.orange[500],
                       blurRadius: 4.0,
-                      offset: const Offset(0.0, 5.0),spreadRadius: 0),
+                      offset: const Offset(0.0, 5.0),
+                      spreadRadius: 0),
                 ]),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -61,10 +62,8 @@ class FenetreDialog extends StatelessWidget {
                 ),
                 RaisedButton(
                   color: Colors.orange[500],
-
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0)),
-
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: AutoSizeText(

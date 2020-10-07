@@ -12,10 +12,9 @@ import 'package:pfa_project_cloudhpc/widgets/weather_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-//import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'model/weather.dart';
+import 'models/weather.dart';
 
 enum OptionsMenu { changeCity, settings }
 
@@ -49,29 +48,30 @@ class _WeatherScreenState extends State<WeatherScreen>
   String _cityName = 'kenitra';
   AnimationController _fadeController;
   Animation<double> _fadeAnimation;
-   Future<void> addWeather(Weather weather) {
+  Future<void> addWeather(Weather weather) {
     // Call the user's CollectionReference to add a new user
     return _weather
         .add({
-      'commentaire': '${weather.cityName}: ${weather.description}',
-    'location': "${weather.cityName}",
-    'date': DateTime.now(),
-    'weather': {
-      'temperature':
-      weather.temperature.as(TemperatureUnit.celsius).round(),
-      'time': DateFormat('yMd').format(
-          DateTime.fromMillisecondsSinceEpoch(weather.time * 1000)),
-      'sunrise': DateFormat('h:m a').format(
-          DateTime.fromMillisecondsSinceEpoch(weather.sunrise * 1000)),
-      'sunset': DateFormat('h:m a').format(
-          DateTime.fromMillisecondsSinceEpoch(weather.sunset * 1000)),
-      'humidity': weather.humidity.toString() + '%',
-      'windSpeed': weather.windSpeed.toString() + 'm/s',
-    }
+          'commentaire': '${weather.cityName}: ${weather.description}',
+          'location': "${weather.cityName}",
+          'date': DateTime.now(),
+          'weather': {
+            'temperature':
+                weather.temperature.as(TemperatureUnit.celsius).round(),
+            'time': DateFormat('yMd').format(
+                DateTime.fromMillisecondsSinceEpoch(weather.time * 1000)),
+            'sunrise': DateFormat('h:m a').format(
+                DateTime.fromMillisecondsSinceEpoch(weather.sunrise * 1000)),
+            'sunset': DateFormat('h:m a').format(
+                DateTime.fromMillisecondsSinceEpoch(weather.sunset * 1000)),
+            'humidity': weather.humidity.toString() + '%',
+            'windSpeed': weather.windSpeed.toString() + 'm/s',
+          }
         })
         .then((value) => print("add new weather"))
         .catchError((error) => print("Failed to add weather: $error"));
   }
+
   @override
   void initState() {
     super.initState();
@@ -103,61 +103,63 @@ class _WeatherScreenState extends State<WeatherScreen>
       ),
       body: Container(
         constraints: BoxConstraints.expand(),
-        child: FadeTransition(
-          opacity: _fadeAnimation,
-          child: BlocBuilder(
-              bloc: _weatherBloc,
-              // ignore: missing_return
-              builder: (_, WeatherState weatherState) {
-                if (weatherState is WeatherLoaded) {
-                  this._cityName = weatherState.weather.cityName;
-                  _fadeController.reset();
-                  _fadeController.forward();
-                  addWeather(weatherState.weather);
-                  return WeatherWidget(
-                    weather: weatherState.weather,
-                  );
-                } else if (weatherState is WeatherError ||
-                    weatherState is WeatherEmpty) {
-                  String errorText = 'There was an error fetching weather data';
-                  if (weatherState is WeatherError) {
-                    if (weatherState.errorCode == 404) {
-                      errorText =
-                          'We have trouble fetching weather for $_cityName';
+        child: SingleChildScrollView(
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: BlocBuilder(
+                bloc: _weatherBloc,
+                // ignore: missing_return
+                builder: (_, WeatherState weatherState) {
+                  if (weatherState is WeatherLoaded) {
+                    this._cityName = weatherState.weather.cityName;
+                    _fadeController.reset();
+                    _fadeController.forward();
+                    addWeather(weatherState.weather);
+                    return WeatherWidget(
+                      weather: weatherState.weather,
+                    );
+                  } else if (weatherState is WeatherError ||
+                      weatherState is WeatherEmpty) {
+                    String errorText = 'There was an error fetching weather data';
+                    if (weatherState is WeatherError) {
+                      if (weatherState.errorCode == 404) {
+                        errorText =
+                            'We have trouble fetching weather for $_cityName';
+                      }
                     }
-                  }
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.error_outline,
-                        color: Colors.redAccent,
-                        size: 24,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        errorText,
-                        style: TextStyle(),
-                      ),
-                      FlatButton(
-                        child: Text(
-                          "Try Again",
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.error_outline,
+                          color: Colors.redAccent,
+                          size: 24,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          errorText,
                           style: TextStyle(),
                         ),
-                        onPressed: _fetchWeatherWithCity,
-                      )
-                    ],
-                  );
-                } else if (weatherState is WeatherLoading) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
-                    ),
-                  );
-                }
-              }),
+                        FlatButton(
+                          child: Text(
+                            "Try Again",
+                            style: TextStyle(),
+                          ),
+                          onPressed: _fetchWeatherWithCity,
+                        )
+                      ],
+                    );
+                  } else if (weatherState is WeatherLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+                      ),
+                    );
+                  }
+                }),
+          ),
         ),
       ),
     );
@@ -167,7 +169,6 @@ class _WeatherScreenState extends State<WeatherScreen>
     _weatherBloc.dispatch(FetchWeather(cityName: _cityName));
   }
 
-
   void _showCityChangeDialog() {
     showDialog(
         context: context,
@@ -176,7 +177,7 @@ class _WeatherScreenState extends State<WeatherScreen>
           return AlertDialog(
             backgroundColor: Colors.white,
             title: Text('Change city', style: TextStyle(color: Colors.black)),
-            actions: <Widget>[
+            actions: [
               FlatButton(
                 child: Text(
                   'ok',

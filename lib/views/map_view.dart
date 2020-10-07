@@ -1,10 +1,5 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/plugin_api.dart' as pl;
-import 'package:google_map_polyline/google_map_polyline.dart';
-
-
 import 'secrets.dart'; // Stores the Google Maps API Key
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
@@ -17,17 +12,18 @@ class MapView extends StatefulWidget {
 }
 
 class _MapViewState extends State<MapView> {
-  CameraPosition _initialLocation = CameraPosition(target: LatLng(0.0, 0.0),zoom: 14);
+  CameraPosition _initialLocation =
+      CameraPosition(target: LatLng(0.0, 0.0), zoom: 14);
   GoogleMapController mapController;
 
   final Geolocator _geolocator = Geolocator();
-  final Set<Polyline> pl={};
+  final Set<Polyline> pl = {};
   // List<LatLng> routesCoords;
   //GoogleMapPolyline googleMapPolyline= new GoogleMapPolyline(apiKey: Secrets.API_KEY);
   Position _currentPosition;
 
   String _currentAddress;
-  double distanceInMeters=0.0;
+  double distanceInMeters = 0.0;
   final startAddressController = TextEditingController();
   final destinationAddressController = TextEditingController();
 
@@ -123,7 +119,7 @@ class _MapViewState extends State<MapView> {
 
       setState(() {
         _currentAddress =
-        "${place.name}, ${place.locality}, ${place.postalCode}, ${place.country}";
+            "${place.name}, ${place.locality}, ${place.postalCode}, ${place.country}";
         startAddressController.text = _currentAddress;
         _startAddress = _currentAddress;
       });
@@ -137,9 +133,9 @@ class _MapViewState extends State<MapView> {
     try {
       // Retrieving placemarks from addresses
       List<Placemark> startPlacemark =
-      await _geolocator.placemarkFromAddress(_startAddress);
+          await _geolocator.placemarkFromAddress(_startAddress);
       List<Placemark> destinationPlacemark =
-      await _geolocator.placemarkFromAddress(_destinationAddress);
+          await _geolocator.placemarkFromAddress(_destinationAddress);
 
       if (startPlacemark != null && destinationPlacemark != null) {
         // Use the retrieved coordinates of the current position,
@@ -147,8 +143,8 @@ class _MapViewState extends State<MapView> {
         // current position, as it results in better accuracy.
         Position startCoordinates = _startAddress == _currentAddress
             ? Position(
-            latitude: _currentPosition.latitude,
-            longitude: _currentPosition.longitude)
+                latitude: _currentPosition.latitude,
+                longitude: _currentPosition.longitude)
             : startPlacemark[0].position;
         Position destinationCoordinates = destinationPlacemark[0].position;
 
@@ -229,7 +225,7 @@ class _MapViewState extends State<MapView> {
 
         await _createPolylines(startCoordinates, destinationCoordinates);
 
-        double totalDistance = distanceInMeters*1000;
+        double totalDistance = distanceInMeters * 1000;
 
         // Calculating the total distance by adding the distance
         // between small segments
@@ -243,9 +239,11 @@ class _MapViewState extends State<MapView> {
         }
 
         setState(() {
-          _placeDistance = (distanceInMeters.abs()*1000/1000).toStringAsFixed(3);//totalDistance.toStringAsFixed(2);
+          _placeDistance = (distanceInMeters.abs() * 1000 / 1000)
+              .toStringAsFixed(3); //totalDistance.toStringAsFixed(2);
           print("********$totalDistance**************************");
-          print('DISTANCE: ************ ${(distanceInMeters*1000/100).toInt()} km');
+          print(
+              'DISTANCE: ************ ${(distanceInMeters * 1000 / 100).toInt()} km');
         });
 
         return true;
@@ -269,10 +267,9 @@ class _MapViewState extends State<MapView> {
 
   // Create the polylines for showing the route between two places
   _createPolylines(Position start, Position destination) async {
-
     polylinePoints = PolylinePoints();
 
-    PolylineResult result  = await polylinePoints.getRouteBetweenCoordinates(
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       Secrets.API_KEY, // Google Maps API Key
       PointLatLng(start.latitude, start.longitude),
       PointLatLng(destination.latitude, destination.longitude),
@@ -284,7 +281,6 @@ class _MapViewState extends State<MapView> {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     }
-
 
     PolylineId id = PolylineId('polyline');
     Polyline polyline = Polyline(
@@ -313,7 +309,10 @@ class _MapViewState extends State<MapView> {
       height: height,
       width: width,
       child: Scaffold(
-        appBar: AppBar(title: Text("GPS"), backgroundColor: Colors.orange[500],),
+        appBar: AppBar(
+          title: Text("GPS"),
+          backgroundColor: Colors.orange[500],
+        ),
         key: _scaffoldKey,
         body: Stack(
           children: <Widget>[
@@ -399,7 +398,6 @@ class _MapViewState extends State<MapView> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-
                           SizedBox(height: 0),
                           _textField(
                               label: 'Start',
@@ -426,8 +424,7 @@ class _MapViewState extends State<MapView> {
                               prefixIcon: Icon(Icons.looks_two),
                               controller: destinationAddressController,
                               width: 300,
-
-                              locationCallback: (String value) async{
+                              locationCallback: (String value) async {
                                 setState(() {
                                   _destinationAddress = value;
                                 });
@@ -446,35 +443,33 @@ class _MapViewState extends State<MapView> {
                           SizedBox(height: 5),*/
                           RaisedButton(
                             onPressed: (_startAddress != '' &&
-                                _destinationAddress != '')
+                                    _destinationAddress != '')
                                 ? () async {
-                              setState(() {
-                                if (markers.isNotEmpty) markers.clear();
-                                if (polylines.isNotEmpty)
-                                  polylines.clear();
-                                if (polylineCoordinates.isNotEmpty)
-                                  polylineCoordinates.clear();
-                                _placeDistance = '';
-                              });
+                                    setState(() {
+                                      if (markers.isNotEmpty) markers.clear();
+                                      if (polylines.isNotEmpty)
+                                        polylines.clear();
+                                      if (polylineCoordinates.isNotEmpty)
+                                        polylineCoordinates.clear();
+                                      _placeDistance = '';
+                                    });
 
-                              _calculateDistance().then((isCalculated) {
-                                if (isCalculated) {
-                                  _scaffoldKey.currentState.showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          'Sucessfully'),
-                                    ),
-                                  );
-                                } else {
-                                  _scaffoldKey.currentState.showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          'Error'),
-                                    ),
-                                  );
-                                }
-                              });
-                            }
+                                    _calculateDistance().then((isCalculated) {
+                                      if (isCalculated) {
+                                        _scaffoldKey.currentState.showSnackBar(
+                                          SnackBar(
+                                            content: Text('Sucessfully'),
+                                          ),
+                                        );
+                                      } else {
+                                        _scaffoldKey.currentState.showSnackBar(
+                                          SnackBar(
+                                            content: Text('Error'),
+                                          ),
+                                        );
+                                      }
+                                    });
+                                  }
                                 : null,
                             color: Colors.orange[500],
                             shape: RoundedRectangleBorder(
@@ -482,7 +477,11 @@ class _MapViewState extends State<MapView> {
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(0.0),
-                              child: Icon(Icons.search,size: 30,color: Colors.white,),
+                              child: Icon(
+                                Icons.search,
+                                size: 30,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ],

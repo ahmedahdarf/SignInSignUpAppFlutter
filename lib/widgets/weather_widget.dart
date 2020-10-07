@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:pfa_project_cloudhpc/model/weather.dart';
+import 'package:pfa_project_cloudhpc/models/weather.dart';
 import 'package:pfa_project_cloudhpc/widgets/current_conditions.dart';
 import 'package:pfa_project_cloudhpc/widgets/value_tile.dart';
 import 'package:intl/intl.dart';
 
 class WeatherWidget extends StatelessWidget {
   final Weather weather;
-  
 
   WeatherWidget({this.weather}) : assert(weather != null);
 

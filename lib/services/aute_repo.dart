@@ -11,7 +11,7 @@ class AuthRepo {
   Future<void> signInWithGoogle() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
-    await googleUser.authentication;
+        await googleUser.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
@@ -26,8 +26,10 @@ class AuthRepo {
 
   Future<UserModel> signInWithEmailAndPassword(
       {String email, String password}) async {
-   var authResul= await _auth.signInWithEmailAndPassword(email: email, password: password);
-    return  UserModel(authResul.user.uid,displayName: authResul.user.displayName);
+    var authResul = await _auth.signInWithEmailAndPassword(
+        email: email, password: password);
+    return UserModel(authResul.user.uid,
+        displayName: authResul.user.displayName);
   }
 
   Future<UserModel> getUser() async {

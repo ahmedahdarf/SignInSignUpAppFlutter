@@ -1,8 +1,6 @@
-
-
 import 'package:meta/meta.dart';
 import 'package:pfa_project_cloudhpc/api/weather_api_client.dart';
-import 'package:pfa_project_cloudhpc/model/weather.dart';
+import 'package:pfa_project_cloudhpc/models/weather.dart';
 
 class WeatherRepository {
   final WeatherApiClient weatherApiClient;

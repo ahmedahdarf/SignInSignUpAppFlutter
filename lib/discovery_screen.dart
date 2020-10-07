@@ -20,7 +20,7 @@ class DiscoveryPage extends StatefulWidget {
 
 class _DiscoveryPage extends State<DiscoveryPage> {
   CollectionReference discoveries =
-  Firestore.instance.collection('crowdSensing');
+      Firestore.instance.collection('crowdSensing');
   final Geolocator _geolocator = Geolocator();
   Position _position;
   Timer _timer;
@@ -67,6 +67,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
       print(e);
     });
   }
+
   _getAddressFromLatLng() async {
     try {
       List<Placemark> p = await _geolocator.placemarkFromCoordinates(
@@ -76,14 +77,13 @@ class _DiscoveryPage extends State<DiscoveryPage> {
 
       setState(() {
         _currentAddress =
-        "[${_position.latitude != null ? _position.latitude : ''},${_position.latitude != null ? _position.latitude : ''}],${place.country}";
+            "[${_position.latitude != null ? _position.latitude : ''},${_position.latitude != null ? _position.latitude : ''}],${place.country}";
       });
       print("$_currentAddress");
     } catch (e) {
       print(e);
     }
   }
-
 
   _startDiscovery() async {
     _streamSubscription =
@@ -101,13 +101,12 @@ class _DiscoveryPage extends State<DiscoveryPage> {
         isDiscovering = false;
       });
       await _getCurrentLocation();
-      String date = DateFormat.yMd().add_jm().format(new DateTime.now());
       print(results.length);
 
-      if (results.length >=1) {
+      if (results.length >= 1) {
         print(results.length);
         discoveries.add({
-          'commentaire': 'Les gens près',
+          'commentaire': 'Embouteillage', //modifier le commentaire plus tard
           'date': DateTime.now(),
           'location': _currentAddress,
           'discovery': {
@@ -119,7 +118,6 @@ class _DiscoveryPage extends State<DiscoveryPage> {
         });
       }
     });
-
   }
 
   bool checkIfExist(bool test(BluetoothDiscoveryResult element)) {
