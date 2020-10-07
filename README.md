@@ -16,3 +16,7 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 "# LoginAppFlutter" 
 "# Ahmed-App" 
+
+"Description
+"The main goal of this PFA work is to design and develop a mobile application that collects road data to help with road safety.
+The application allows Internet users to consult its feed and have updates on the road situation as well as informations about their desired destination. It also allows them to participate in the data collection using mobile phone sensors (camera, location,WIFI, Bluetooth). Furthermore, the application ensure security and privacy of user data. This application uses APIs (weather, Google maps), it also uses Machine-learning libraries that are provided by a mobile SDK to do facial recognition and hide faces.
