@@ -120,11 +120,11 @@ class _WeatherScreenState extends State<WeatherScreen>
                     );
                   } else if (weatherState is WeatherError ||
                       weatherState is WeatherEmpty) {
-                    String errorText = 'There was an error fetching weather data';
+                    String errorText = 'Une erreur s est produite lors de la récupération des données météorologiques';
                     if (weatherState is WeatherError) {
                       if (weatherState.errorCode == 404) {
                         errorText =
-                            'We have trouble fetching weather for $_cityName';
+                            'Nous avons du mal à récupérer la météo pour $_cityName';
                       }
                     }
                     return Column(
@@ -144,7 +144,7 @@ class _WeatherScreenState extends State<WeatherScreen>
                         ),
                         FlatButton(
                           child: Text(
-                            "Try Again",
+                            "Réessayer",
                             style: TextStyle(),
                           ),
                           onPressed: _fetchWeatherWithCity,
@@ -176,7 +176,7 @@ class _WeatherScreenState extends State<WeatherScreen>
         builder: (BuildContext context) {
           return AlertDialog(
             backgroundColor: Colors.white,
-            title: Text('Change city', style: TextStyle(color: Colors.black)),
+            title: Text('Changer de ville', style: TextStyle(color: Colors.black)),
             actions: [
               FlatButton(
                 child: Text(
@@ -195,7 +195,7 @@ class _WeatherScreenState extends State<WeatherScreen>
                 _cityName = text;
               },
               decoration: InputDecoration(
-                  hintText: 'Name of your city',
+                  hintText: 'Nom de votre ville',
                   hintStyle: TextStyle(color: Colors.black),
                   suffixIcon: GestureDetector(
                     onTap: () {
@@ -225,7 +225,7 @@ class _WeatherScreenState extends State<WeatherScreen>
     switch (permissionResult[PermissionGroup.locationWhenInUse]) {
       case PermissionStatus.denied:
       case PermissionStatus.unknown:
-        print('location permission denied');
+        print('autorisation de localisation refusée');
         _showLocationDeniedDialog(permissionHandler);
         throw Error();
     }
@@ -243,12 +243,12 @@ class _WeatherScreenState extends State<WeatherScreen>
         builder: (BuildContext context) {
           return AlertDialog(
             backgroundColor: Colors.white,
-            title: Text('Location is disabled :(',
+            title: Text('La localisation est désactivée :(',
                 style: TextStyle(color: Colors.black)),
             actions: <Widget>[
               FlatButton(
                 child: Text(
-                  'Enable!',
+                  'Activer!',
                   style: TextStyle(color: Colors.green, fontSize: 16),
                 ),
                 onPressed: () {
