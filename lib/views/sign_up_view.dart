@@ -258,7 +258,7 @@ class _SignUpViewState extends State<SignUpView> {
         TextFormField(
           validator: NameValidator.validate,
           style: TextStyle(fontSize: 22, color: Colors.black),
-          decoration: buildSignUpInputDecoration("Name")
+          decoration: buildSignUpInputDecoration("Nom")
               .copyWith(prefixIcon: Icon(Icons.account_circle)),
           onSaved: (val) => _name = val,
         ),
@@ -334,7 +334,7 @@ class _SignUpViewState extends State<SignUpView> {
       _submitButtonText = "Se connecter";
       _showForgotPassword = true;
     } else if (authFormType == AuthFormType.reset) {
-      _switchButtonText = "revenir pour vous connecter";
+      _switchButtonText = "Revenir pour vous connecter";
       _newFormState = "signIn";
       _submitButtonText = "Envoyer";
       _showSocial = false;
@@ -424,6 +424,7 @@ class _SignUpViewState extends State<SignUpView> {
             height: 5.0,
           ),
           GoogleSignInButton(
+            text: "Connectez-vous avec Google ",
             onPressed: () async {
               try {
                 if (authFormType == AuthFormType.convert) {

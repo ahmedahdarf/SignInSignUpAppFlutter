@@ -140,7 +140,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
       appBar: AppBar(
         backgroundColor: Colors.orangeAccent,
         title: Text(
-          "Detection par bluetooth",
+          "Détection par bluetooth",
         ),
       ),
       body: isDiscovering

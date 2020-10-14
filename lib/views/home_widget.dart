@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.orange[500],
-        title: Text("Home"),
+        title: Text("Accueil"),
         actions: [],
       ),
       drawer: MainDrawer(),

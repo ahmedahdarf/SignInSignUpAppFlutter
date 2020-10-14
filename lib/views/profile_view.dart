@@ -375,7 +375,7 @@ class _ProfilViewState extends State<ProfilView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile"),
+        title: Text("Profil"),
         backgroundColor: Colors.orange,
       ),
       body: SingleChildScrollView(

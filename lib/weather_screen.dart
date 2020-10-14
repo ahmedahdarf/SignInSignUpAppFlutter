@@ -92,7 +92,7 @@ class _WeatherScreenState extends State<WeatherScreen>
         backgroundColor: Colors.orangeAccent,
         elevation: 0,
         title: Text(
-          "Weather",
+          "Météo",
         ),
         actions: <Widget>[
           IconButton(

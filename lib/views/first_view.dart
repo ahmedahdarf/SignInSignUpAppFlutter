@@ -30,7 +30,7 @@ class FirstView extends StatelessWidget {
                     height: _height * 0.10,
                   ),
                   AutoSizeText(
-                    "Cette application va vous aider à trouver la route sécuriser",
+                    "Cette application va vous aider à trouver la route sécurisée",
                     maxLines: 2,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 40, color: Colors.white),
@@ -57,12 +57,12 @@ class FirstView extends StatelessWidget {
                           context: context,
                           builder: (BuildContext context) => FenetreDialog(
                                 title:
-                                    "souhaitez-vous créer un compte gratuit?",
+                                    "Souhaitez-vous créer un nouveau compte ?",
                                 description:
-                                    "Avec un compte vous pouvez consulter les fils d'actualités et de participer à la collection de données",
+                                    "Avec un compte vous pouvez consulter le fils d'actualités et de participer à la collection de données",
                                 primaryBtnText: "S'inscrire",
                                 primaryBtnRoute: "/signUp",
-                                secondaryBtnText: "peut-être plus tard",
+                                secondaryBtnText: "Peut-être plus tard",
                                 secondaryBtnRoute: "/anonymousSignIn",
                               ));
                     },
@@ -72,7 +72,7 @@ class FirstView extends StatelessWidget {
                   ),
                   FlatButton(
                     child: Text(
-                      "Sign In",
+                      "Se connecter",
                       style: TextStyle(fontSize: 26, color: Colors.white),
                     ),
                     onPressed: () {

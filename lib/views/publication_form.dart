@@ -90,7 +90,7 @@ class _PublicationFormState extends State<PublicationForm> {
         print("uid $userId");
         return Scaffold(
           appBar: AppBar(
-            title: Text("Ajouter publication"),
+            title: Text("Ajouter une publication"),
             backgroundColor: Colors.orange[500],
           ),
           body: SingleChildScrollView(
@@ -119,7 +119,7 @@ class _PublicationFormState extends State<PublicationForm> {
                         //splashColor: Colors.orange,
                         color: Colors.orange,
                         child: Text(
-                          "Ajouter Une image",
+                          "Ajouter une image",
                           style: TextStyle(color: Colors.white),
                         ),
                         onPressed: () {
@@ -220,7 +220,7 @@ class _PublicationFormState extends State<PublicationForm> {
     return isLoading
         ? Center(child: CircularProgressIndicator())
         : (_imageFile == null)
-            ? Center(child: Text('No image selected'))
+            ? Center(child: Text('Aucune image sélectionnée'))
             : RepaintBoundary(
                 key: _globalKey,
                 child: FittedBox(
@@ -264,7 +264,7 @@ class _PublicationFormState extends State<PublicationForm> {
                     color: Colors.black,
                   ),
                   GestureDetector(
-                    child: Text("Gallery"),
+                    child: Text("Galerie"),
                     onTap: () {
                       //_openGallery(context);
                       _getImageAndDetectFaces(context, ImageSource.gallery);
@@ -277,7 +277,7 @@ class _PublicationFormState extends State<PublicationForm> {
                     color: Colors.black,
                   ),
                   GestureDetector(
-                    child: Text("Camera"),
+                    child: Text("Caméra"),
                     onTap: () {
                       //_openCamera(context);
                       _getImageAndDetectFaces(context, ImageSource.camera);

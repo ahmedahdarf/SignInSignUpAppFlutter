@@ -23,7 +23,7 @@ class MainDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.home),
             title: Text(
-              "Home",
+              "Accueil",
               style: TextStyle(fontSize: 15),
             ),
             onTap: () {
@@ -36,7 +36,7 @@ class MainDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.cloud),
             title: Text(
-              "weather",
+              "Météo",
               style: TextStyle(fontSize: 15),
             ),
             onTap: () {
@@ -49,7 +49,7 @@ class MainDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.bluetooth),
             title: Text(
-              "bluetooth",
+              "Bluetooth",
               style: TextStyle(fontSize: 15),
             ),
             onTap: () {
@@ -85,7 +85,7 @@ class MainDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.arrow_back),
             title: Text(
-              "Se deconnecter",
+              "Se déconnecter",
               style: TextStyle(fontSize: 15),
             ),
             onTap: () async {
